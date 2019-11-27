@@ -12,7 +12,7 @@ The implementation of ProFound in this package is not exact: some liberties were
 
 This code makes extensive use of the [Numba](https://numba.pydata.org/) Just In Time (JIT) compiler that translates a subset of Python and NumPy code into fast machine code. When the code is run for the first time, all the JIT functions need to be compiled, thus increasing the overall runtime. After the first run, the code should be much quicker due to most of the compiled functions being cached.
 
-The complete runtime for a 480 by 480 pixel image for the cached code is ~1.5 s on a single core of an Intel Xeon E5507 @ 2.27 GHz with 280 MB of RAM used.
+The complete runtime for a 480 by 480 pixel LoTSS image (see below) for the cached code is ~1.5 s on a single core of an Intel Xeon E5507 @ 2.27 GHz with 280 MB of RAM used. For a 1000 by 1000 pixel PanSTARRS i-band image (see below) the extraction takes 6 to 10 s, depending on the number of sources.
 
 ### Dependencies
 
@@ -28,8 +28,18 @@ If you have made use of this code in your research, please attribute the origina
 
 ### Examples
 
-#### LoTSS (LOFAR Two Meter Sky Survey)
+##### LoTSS (LOFAR Two Meter Sky Survey)
+
+These are images in the radio at a frequency of 150 MHz. The resolution is 6"/beam.
 
 <img src="Examples/LoTSS_plots/LoTSS_61_P255+78_ProFound_extraction_grid=200_minf=4_tol=16.png"  width="400" />
 
 <img src="Examples/LoTSS_plots/LoTSS_77_P032+29_ProFound_extraction_grid=200_minf=4_tol=16.png"  width="400" />
+
+##### PanSTARRS
+
+Optical images of 1000 by 1000 pixels in i and r band, respectively.
+
+<img src="Examples/PanSTARRS_plots/PanSTARRS_ra=2.401_dec=37.551_s=2880_i_ProFound_extraction_grid=200_minf=4_tol=16.png"  width="400" />
+
+<img src="Examples/PanSTARRS_plots/PanSTARRS_ra=173.173_dec=17.104_s=2880_r_ProFound_extraction_grid=200_minf=4_tol=16.png"  width="400" />
