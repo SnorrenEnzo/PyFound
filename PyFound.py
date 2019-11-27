@@ -112,7 +112,7 @@ def getSky(input, n_iterations = 5, segmap = None, gridspacing = 200):
 	return med_map_interp, rms_map_interp
 
 @njit(cache = True)
-def findBrightestPixel(data, sky, sky_RMS, segmap, minflux_sn):
+def findBrightestPixel(data, sky, sky_RMS, segmap, skycut):
 	"""
 	Find the location of the brightest pixel above the minimum threshold
 	"""
@@ -123,7 +123,7 @@ def findBrightestPixel(data, sky, sky_RMS, segmap, minflux_sn):
 		for j in range(data.shape[1]):
 			if segmap[i][j] == -1\
 				and data[i][j] > highvalue\
-				and data[i][j] > sky[i][j] + sky_RMS[i][j] * minflux_sn:
+				and data[i][j] > sky[i][j] + sky_RMS[i][j] * skycut:
 				highloc = (i, j)
 				highvalue = data[i][j]
 
@@ -192,7 +192,7 @@ def findHighestPriority(pq_gradients, pq_i, pq_j):
 	return i_new, j_new, highestloc
 
 @njit(cache = True)
-def growSegment(data, sky, sky_RMS, gradients, segmap, start_loc, segment_it, minflux_sn, tolerance, ext):
+def growSegment(data, sky, sky_RMS, gradients, segmap, start_loc, segment_it, skycut, tolerance, ext):
 	"""
 	Grow a single segment
 	"""
@@ -212,7 +212,7 @@ def growSegment(data, sky, sky_RMS, gradients, segmap, start_loc, segment_it, mi
 	growit = 0
 	continue_growing = True
 	while continue_growing:
-		min_flux = sky[i][j] + sky_RMS[i][j] * minflux_sn
+		min_flux = sky[i][j] + sky_RMS[i][j] * skycut
 
 		i_new, j_new, highestloc = findHighestPriority(pq_gradients, pq_i, pq_j)
 
@@ -235,7 +235,7 @@ def growSegment(data, sky, sky_RMS, gradients, segmap, start_loc, segment_it, mi
 		if len(pq_i) == 0:
 			continue_growing = False
 
-def segment(data, sky, sky_RMS, minflux_sn = 4, tolerance = 8, ext = 1):
+def segment(data, sky, sky_RMS, skycut = 4, tolerance = 8, ext = 1):
 	"""
 	Make a segmentation map
 	"""
@@ -243,7 +243,7 @@ def segment(data, sky, sky_RMS, minflux_sn = 4, tolerance = 8, ext = 1):
 	data = data.astype(float)
 	sky = sky.astype(float)
 	sky_RMS = sky_RMS.astype(float)
-	minflux_sn = float(minflux_sn)
+	skycut = float(skycut)
 	tolerance = float(tolerance)
 
 	#init the segmap
@@ -261,13 +261,13 @@ def segment(data, sky, sky_RMS, minflux_sn = 4, tolerance = 8, ext = 1):
 	while find_new_segments:
 		print(f'Segment {segment_it}, runtime = {timer() - starttime:0.03f} s', end = '\r')
 		#find the location of the brightest pixel
-		brightest_loc = findBrightestPixel(data, sky, sky_RMS, segmap, minflux_sn)
+		brightest_loc = findBrightestPixel(data, sky, sky_RMS, segmap, skycut)
 
 		if brightest_loc == (-1, -1):
 			find_new_segments = False
 			break
 
-		growSegment(data, sky, sky_RMS, gradients, segmap, brightest_loc, segment_it, minflux_sn, tolerance, ext)
+		growSegment(data, sky, sky_RMS, gradients, segmap, brightest_loc, segment_it, skycut, tolerance, ext)
 
 		segment_it += 1
 
@@ -445,7 +445,7 @@ def perform_dilations(segmap, data, sky, dilation_kernel = disk(4), convergence_
 
 	return dilated_segmap
 
-def PyFound(data, minflux_sn = 4, tolerance = 16):
+def PyFound(data, skycut = 4, tolerance = 16):
 	"""
 	Extract sources using the ProFound algorithm with each step from the original
 	paper by Robotham et al. (2018) page 4 indicated with roman numerals.
@@ -464,7 +464,7 @@ def PyFound(data, minflux_sn = 4, tolerance = 16):
 
 	#### ii
 	#get the segmentation map
-	segmap = segment(smooth_data, sky, sky_RMS, minflux_sn = minflux_sn, tolerance = tolerance, ext = 1)
+	segmap = segment(smooth_data, sky, sky_RMS, skycut = skycut, tolerance = tolerance, ext = 1)
 
 
 	#### iii
@@ -473,7 +473,7 @@ def PyFound(data, minflux_sn = 4, tolerance = 16):
 
 	#### iv - viii
 	#get the segmentation map
-	segmap = segment(smooth_data, sky, sky_RMS, minflux_sn = minflux_sn, tolerance = tolerance, ext = 1)
+	segmap = segment(smooth_data, sky, sky_RMS, skycut = skycut, tolerance = tolerance, ext = 1)
 	#dilate with diameter of 9 pixels iteratively
 	segmap = perform_dilations(segmap, data, sky)
 

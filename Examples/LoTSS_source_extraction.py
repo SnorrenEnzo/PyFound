@@ -51,10 +51,11 @@ def main():
 
 	cutout_size = cutout_size = 12 * u.arcmin
 
-	minflux_sn = 4
+	skycut = 3.5
 	tolerance = 16
 
 	#load the coordinates; engine = 'python' to prevent warning
+	#this is simply a list of interesting compact and extended sources
 	df = pd.read_csv(f'{general_path}Make_cutouts/ra_decs.txt', sep = ', ', engine = 'python')
 
 	#get coordinates
@@ -90,7 +91,7 @@ def main():
 			cutout_data = cutout_data * 1e3
 
 		#### now start the extraction
-		segmap, sky, sky_RMS, edges = PyFound(cutout_data, minflux_sn = minflux_sn, tolerance = tolerance)
+		segmap, sky, sky_RMS, edges = PyFound(cutout_data, skycut = skycut, tolerance = tolerance)
 		labels = np.unique(segmap)
 
 		fig = plt.figure(figsize = (14, 11))
@@ -103,7 +104,7 @@ def main():
 		imagerange_RMS = np.median(sky_RMS)
 		#plot the flux
 		im1 = ax1.imshow(cutout_data, origin = 'lower', cmap = 'Blues',
-					vmin = -2*imagerange_RMS, vmax = 50*imagerange_RMS, norm = norm)
+					vmin = -2*imagerange_RMS, vmax = 20*imagerange_RMS, norm = norm)
 		#add segment edges
 		cmap_reds = plt.get_cmap('Reds').reversed()
 		edges_rgb = cmap_reds(edges)
@@ -148,7 +149,7 @@ def main():
 
 		fig.subplots_adjust(wspace = 0.15)
 
-		plt.savefig(f'{plot_saveloc}{datatype}_{i}_{fieldname}_ProFound_extraction_grid=200_minf={minflux_sn}_tol={tolerance}.png', dpi = 300, bbox_inches = 'tight')
+		plt.savefig(f'{plot_saveloc}{datatype}_{i}_{fieldname}_ProFound_extraction_grid=200_minf={skycut}_tol={tolerance}.png', dpi = 300, bbox_inches = 'tight')
 		# plt.show()
 		plt.close()
 

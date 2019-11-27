@@ -1,5 +1,5 @@
 """
-A crude example for source extraction on LoTSS (radio) data
+A crude example for source extraction on optical PanSTARRS data
 """
 
 #insert path above to be able to import PyFound
@@ -46,7 +46,7 @@ def main():
 	plot_saveloc = f'{general_path}Extract_sources/fit_plots_ProFound/'
 
 
-	minflux_sn = 4
+	skycut = 4
 	tolerance = 16
 
 	datatype = 'PanSTARRS'
@@ -80,7 +80,7 @@ def main():
 
 
 	#### now start the extraction
-	segmap, sky, sky_RMS, edges = PyFound(cutout_data, minflux_sn = minflux_sn, tolerance = tolerance)
+	segmap, sky, sky_RMS, edges = PyFound(cutout_data, skycut = skycut, tolerance = tolerance)
 	labels = np.unique(segmap)
 
 	fig = plt.figure(figsize = (14, 11))
@@ -138,7 +138,7 @@ def main():
 
 	fig.subplots_adjust(wspace = 0.15)
 
-	plt.savefig(f'{plot_saveloc}{datatype}_{fieldname}_ProFound_extraction_grid=200_minf={minflux_sn}_tol={tolerance}.png', dpi = 300, bbox_inches = 'tight')
+	plt.savefig(f'{plot_saveloc}{datatype}_{fieldname}_ProFound_extraction_grid=200_minf={skycut}_tol={tolerance}.png', dpi = 300, bbox_inches = 'tight')
 	# plt.show()
 	plt.close()
 
