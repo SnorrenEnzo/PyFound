@@ -53,22 +53,6 @@ def main():
 
 	minflux_sn = 4
 	tolerance = 16
-	'''
-	if datatype == 'LoTSS':
-		fieldname = 'P007+39'
-		boxcenter = [5500, 5500]
-		boxsize = [1000, 1000]
-		fits_fname = f'{general_path}DR2_mosaics/{fieldname}.fits'
-
-		flux_colorbar_label = 'Flux [mJy/beam]'
-	elif datatype == 'PanSTARRS':
-		fieldname = 'ra=2.401_dec=37.551_s=2880_i'
-		boxcenter = [500, 500]
-		boxsize = [1000, 1000]
-		fits_fname = f'{general_path}PanSTARRS_downloads/{fieldname}.fits'
-
-		flux_colorbar_label = 'Counts'
-	'''
 
 	#load the coordinates; engine = 'python' to prevent warning
 	df = pd.read_csv(f'{general_path}Make_cutouts/ra_decs.txt', sep = ', ', engine = 'python')
@@ -96,17 +80,6 @@ def main():
 		if len(img_data.shape) == 4:
 			img_data = img_data[0,0]
 			wcs = wcsTakeFirstTwo(img_header)
-
-		'''
-		if boxcenter is not None:
-			#make a cutout with astropy
-			cutout = Cutout2D(img_data, tuple(boxcenter), boxsize, wcs = wcs, mode = 'partial')
-			cutout_data = cutout.data
-			cutout_wcs = cutout.wcs
-		else:
-			cutout_data = img_data
-			cutout_wcs = wcs
-		'''
 
 		cutout = Cutout2D(img_data, cutout_coords, cutout_size, wcs = wcs, mode = 'partial')
 		cutout_data = cutout.data
