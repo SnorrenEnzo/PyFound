@@ -1,7 +1,7 @@
 # PyFound
-A fast Python implementation of the ProFound source extraction algorithm by Robotham et al. (2018).
+A fast Python implementation of the ProFound source extraction algorithm, which was originally implemented in R.
 
-Based on:
+The paper presenting the original ProFound algorithm:
 > A.S.G. Robotham, L.J.M. Davies, S.P. Driver, S. Koushan, D.S. Taranu, S. Casura, J. Liske 2018 *ProFound: Source Extraction and Application to Modern Survey Data*, MNRAS 476, 3137
 
 ### Word of caution
