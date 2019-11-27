@@ -25,3 +25,11 @@ PyFound requires the following packages to be installed:
 ### Attribution
 
 If you have made use of this code in your research, please attribute the original paper by Robotham et al. (2018) and this Python implementation project.
+
+### Examples
+
+#### LoTSS (LOFAR Two Meter Sky Survey)
+
+<img src="Examples/LoTSS_plots/LoTSS_61_P255+78_ProFound_extraction_grid=200_minf=4_tol=16.png"  width="400" />
+
+<img src="Examples/LoTSS_plots/LoTSS_77_P032+29_ProFound_extraction_grid=200_minf=4_tol=16.png"  width="400" />
