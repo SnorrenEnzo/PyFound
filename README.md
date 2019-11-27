@@ -30,7 +30,7 @@ If you have made use of this code in your research, please attribute the origina
 
 ##### LoTSS (LOFAR Two Meter Sky Survey)
 
-These are images in the radio at a frequency of 150 MHz. The resolution is 6"/beam.
+These are images in the radio at a frequency of 150 MHz. The resolution is 6"/beam. `skycut = 4, tolerance = 16`
 
 <img src="Examples/LoTSS_plots/LoTSS_61_P255+78_ProFound_extraction_grid=200_minf=4_tol=16.png"  width="400" />
 
@@ -38,7 +38,7 @@ These are images in the radio at a frequency of 150 MHz. The resolution is 6"/be
 
 ##### PanSTARRS
 
-Optical images of 1000 by 1000 pixels in i and r band, respectively.
+Optical images of 1000 by 1000 pixels in i and r band, respectively. `skycut = 4, tolerance = 16`
 
 <img src="Examples/PanSTARRS_plots/PanSTARRS_ra=2.401_dec=37.551_s=2880_i_ProFound_extraction_grid=200_minf=4_tol=16.png"  width="400" />
 
